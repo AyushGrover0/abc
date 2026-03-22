@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TaskPilot AI</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="intro-screen" class="intro-screen" aria-hidden="true">
+      <div class="intro-mark"></div>
+      <p class="eyebrow">AI Task Manager</p>
+      <h1 class="intro-title">TaskPilot AI</h1>
+      <p class="intro-copy">Organize the work. Prioritize the next move. Present the outcome beautifully.</p>
+    </div>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <div class="ambient ambient-three"></div>
+    <div id="mobile-overlay" class="mobile-overlay"></div>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="brand-card">
+          <div class="brand-top">
+            <div>
+              <p class="eyebrow">Portfolio Project</p>
+              <h1>TaskPilot AI</h1>
+            </div>
+            <div class="brand-controls">
+              <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle color theme">
+                <span id="theme-toggle-label">Dark mode</span>
+              </button>
+              <button id="close-sidebar" class="theme-toggle mobile-only" type="button" aria-label="Close side panel">
+                Close
+              </button>
+            </div>
+          </div>
+          <p class="muted">An AI-assisted task manager for prioritizing work, planning deadlines, and surfacing smart next actions.</p>
+          <div class="theme-preview-row">
+            <span class="theme-chip sunrise-chip">Sunrise Flow</span>
+            <span class="theme-chip midnight-chip">Midnight Grid</span>
+          </div>
+        </div>
+
+        <section class="panel quick-panel">
+          <div class="panel-head">
+            <p class="eyebrow">Quick Create</p>
+            <span class="pill" id="task-count-pill">0 tasks</span>
+          </div>
+
+          <form id="task-form" class="task-form">
+            <label class="field">
+              <span>Task title</span>
+              <input id="task-title" type="text" maxlength="80" placeholder="Design onboarding flow" required />
+            </label>
+
+            <label class="field">
+              <span>Description</span>
+              <textarea id="task-description" rows="4" placeholder="Add context, blockers, or deliverables"></textarea>
+            </label>
+
+            <div class="field-grid">
+              <label class="field">
+                <span>Project</span>
+                <input id="task-project" type="text" maxlength="40" placeholder="Portfolio Site" />
+              </label>
+
+              <label class="field">
+                <span>Due date</span>
+                <input id="task-due-date" type="date" />
+              </label>
+            </div>
+
+            <div class="field-grid">
+              <label class="field">
+                <span>Priority</span>
+                <select id="task-priority">
+                  <option value="high">High</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="low">Low</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Effort</span>
+                <select id="task-effort">
+                  <option value="quick">Quick win</option>
+                  <option value="moderate" selected>Moderate</option>
+                  <option value="deep">Deep work</option>
+                </select>
+              </label>
+            </div>
+
+            <button class="primary-button" type="submit">Add task</button>
+          </form>
+        </section>
+
+        <section class="panel projects-panel">
+          <div class="panel-head">
+            <p class="eyebrow">Projects</p>
+            <span class="pill" id="project-count-pill">0 active</span>
+          </div>
+          <div id="project-list" class="project-list"></div>
+        </section>
+      </aside>
+
+      <main class="workspace">
+        <header class="hero">
+          <div>
+            <button id="open-sidebar" class="theme-toggle mobile-only" type="button" aria-label="Open side panel">Menu</button>
+            <p class="eyebrow">AI Task Manager</p>
+            <h2>Plan the work, protect your focus, and ship the right things first.</h2>
+            <p class="hero-copy">TaskPilot AI scores urgency, flags overload risk, and turns a messy backlog into a clear plan you can show on a portfolio site.</p>
+          </div>
+          <div class="hero-actions">
+            <button id="seed-demo" class="secondary-button" type="button">Load demo data</button>
+            <button id="clear-all" class="ghost-button" type="button">Clear board</button>
+          </div>
+        </header>
+        <div class="workspace-scroll">
+          <section class="intro-grid">
+            <article class="intro-card">
+              <span class="intro-step">01</span>
+              <h3>Add your work</h3>
+              <p class="muted">Capture tasks with project context, effort level, and deadlines so the board reflects real delivery pressure.</p>
+            </article>
+            <article class="intro-card">
+              <span class="intro-step">02</span>
+              <h3>Get an AI briefing</h3>
+              <p class="muted">The dashboard simulates prioritization logic to surface risk, focus score, and the next best move for the team.</p>
+            </article>
+            <article class="intro-card">
+              <span class="intro-step">03</span>
+              <h3>Present the outcome</h3>
+              <p class="muted">Use the stats, plan view, and project rollups as a polished story for your portfolio or product walkthrough.</p>
+            </article>
+          </section>
+
+          <section class="stats-grid">
+            <article class="stat-card accent-card">
+              <span class="stat-label">AI Focus Score</span>
+              <strong id="focus-score">0</strong>
+              <p id="focus-copy" class="muted">Add tasks to generate a focus score.</p>
+            </article>
+            <article class="stat-card">
+              <span class="stat-label">Due This Week</span>
+              <strong id="due-this-week">0</strong>
+              <p class="muted">Tasks landing in the next 7 days.</p>
+            </article>
+            <article class="stat-card">
+              <span class="stat-label">Completed</span>
+              <strong id="completed-count">0</strong>
+              <p class="muted">Finished work across all projects.</p>
+            </article>
+            <article class="stat-card warning-card">
+              <span class="stat-label">Overdue</span>
+              <strong id="overdue-count">0</strong>
+              <p class="muted">Items that need immediate attention.</p>
+            </article>
+          </section>
+
+          <section class="dashboard-grid">
+            <section class="panel insight-panel">
+              <div class="panel-head">
+                <p class="eyebrow">AI Briefing</p>
+                <button id="refresh-briefing" class="ghost-button small-button" type="button">Refresh insight</button>
+              </div>
+              <div id="briefing-card" class="briefing-card"></div>
+              <div id="next-actions" class="next-actions"></div>
+            </section>
+
+            <section class="panel timeline-panel">
+              <div class="panel-head">
+                <p class="eyebrow">Today Plan</p>
+                <span class="pill" id="today-plan-pill">0 tasks</span>
+              </div>
+              <div id="today-plan" class="today-plan"></div>
+            </section>
+          </section>
+
+          <section class="panel toolbar-panel">
+            <div class="toolbar-row">
+              <label class="search-field">
+                <span class="sr-only">Search tasks</span>
+                <input id="search-input" type="search" placeholder="Search tasks, projects, or notes" />
+              </label>
+              <div class="filter-group">
+                <select id="status-filter">
+                  <option value="all">All statuses</option>
+                  <option value="todo">To do</option>
+                  <option value="doing">In progress</option>
+                  <option value="done">Done</option>
+                </select>
+                <select id="priority-filter">
+                  <option value="all">All priorities</option>
+                  <option value="high">High priority</option>
+                  <option value="medium">Medium priority</option>
+                  <option value="low">Low priority</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <section class="board-grid">
+            <section class="panel column-panel">
+              <div class="panel-head">
+                <p class="eyebrow">Backlog</p>
+                <span class="pill" id="todo-count">0</span>
+              </div>
+              <div id="todo-column" class="task-column"></div>
+            </section>
+
+            <section class="panel column-panel">
+              <div class="panel-head">
+                <p class="eyebrow">In Progress</p>
+                <span class="pill" id="doing-count">0</span>
+              </div>
+              <div id="doing-column" class="task-column"></div>
+            </section>
+
+            <section class="panel column-panel">
+              <div class="panel-head">
+                <p class="eyebrow">Completed</p>
+                <span class="pill" id="done-count">0</span>
+              </div>
+              <div id="done-column" class="task-column"></div>
+            </section>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script src="./config.js"></script>
+    <script src="./renderer.js"></script>
+  </body>
+</html>
